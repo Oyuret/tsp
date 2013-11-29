@@ -188,6 +188,8 @@ void TSP::two_opt() {
   bool testA;
   bool testB;
 
+  int j;
+  int max;
 
   // Continue until no improvements are possible
   while (bestGain != float(0)) {
@@ -196,8 +198,8 @@ void TSP::two_opt() {
 
     for (int i = 1; i < nodes.size()-1; i++) {
 
-      int j = i + 2;
-      int max = 0;
+      j = i + 2;
+      max = 0;
 
       for (; j < nodes.size(); j++) {
 
@@ -260,6 +262,9 @@ void TSP::two_opt() {
   float bestGain = float(INT_MAX);
   int best_i, best_j;
   int max_loops = 0;
+  int a;
+  int b;
+  int c;
 
   while(bestGain != float(0) && max_loops < MAX_2_OPT_LOOPS) {
     bestGain = float(0);
@@ -267,9 +272,9 @@ void TSP::two_opt() {
     // testA
     for(int i=1; i<nodes.size(); ++i) {
 
-      int a = tour[i];
+      a = tour[i];
       //auto aIter = std::find(tour.begin(), tour.end(), a);
-      int b = tour[i+1];
+      b = tour[i+1];
 
       for(int d : nodes[b].neighbourhood) {
 
@@ -281,7 +286,7 @@ void TSP::two_opt() {
 
           //dIter--;
           //int c = *dIter;
-          int c = tour[nodes[d].tour_index-1];
+          c = tour[nodes[d].tour_index-1];
 
           if(nodes[c].tour_index < nodes[a].tour_index) continue;
 
@@ -300,14 +305,15 @@ void TSP::two_opt() {
       }
     }
 
-
+    int c;
+    int d;
     // testB
     for(int i = 1; i < nodes.size(); i++) {
 
 
-      int c = tour[i  ];
+      c = tour[i  ];
       //auto cIter = std::find(tour.begin(), tour.end(), c);
-      int d = tour[i+1];
+      d = tour[i+1];
 
       for(int a : nodes[c].neighbourhood) {
 
