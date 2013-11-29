@@ -124,11 +124,14 @@ void TSP::greedy(int start) {
   // use node 0
   nodes[start].used = true;
   tour[0] = start;
+  int bestIndex;
+  float bestDist;
+  float testDist;
 
   // For every node, choose the closest one as the best next node.
   for(int i=1; i<nodes.size(); ++i) {
-    int bestIndex = -1;
-    float bestDist = float(INT_MAX);
+    bestIndex = -1;
+    bestDist = float(INT_MAX);
 
     // We are using buckets
 #ifdef USE_BUCKETS
@@ -150,7 +153,7 @@ void TSP::greedy(int start) {
     for(size_t j=0; j<nodes.size(); ++j) {
       if(nodes[j].used==false) {
 
-        float testDist = distance(tour[i-1],j);
+        testDist = distance(tour[i-1],j);
         if(testDist < bestDist) {
           bestIndex = j;
           bestDist = testDist;
@@ -265,6 +268,8 @@ void TSP::two_opt() {
   int a;
   int b;
   int c;
+  int d;
+  int end;    
 
   while(bestGain != float(0) && max_loops < MAX_2_OPT_LOOPS) {
     bestGain = float(0);
@@ -305,10 +310,7 @@ void TSP::two_opt() {
       }
     }
 
-    int c;
-    int d;
-    // testB
-    for(int i = 1; i < nodes.size(); i++) {
+   for(int i = 1; i < nodes.size(); i++) {
 
 
       c = tour[i  ];
@@ -328,7 +330,7 @@ void TSP::two_opt() {
 
           //auto bIter = aIter+1;
           //int b = *bIter;
-          int b = tour[nodes[a].tour_index+1];
+          b = tour[nodes[a].tour_index+1];
 
           if(nodes[c].tour_index < nodes[a].tour_index) continue;
 
@@ -360,7 +362,7 @@ void TSP::two_opt() {
       std::reverse(&tour[nodes[best_i].tour_index + 1], &tour[nodes[best_j].tour_index+1]);
 
 
-      int end = nodes[best_j].tour_index+1;
+      end = nodes[best_j].tour_index+1;
       for(size_t i=nodes[best_i].tour_index + 1; i<end; ++i)
         nodes[tour[i]].tour_index = i;
 
