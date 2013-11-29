@@ -174,6 +174,21 @@ void TSP::two_opt() {
   float bestGain = float(INT_MAX);
   int best_i, best_j;
 
+
+  int a;
+  int b;
+  int c;
+  int d;
+
+  int t1;
+  int t2;
+  int t3;
+  int t4;
+
+  bool testA;
+  bool testB;
+
+
   // Continue until no improvements are possible
   while (bestGain != float(0)) {
 
@@ -187,19 +202,19 @@ void TSP::two_opt() {
       for (; j < nodes.size(); j++) {
 
         // test
-        int a = tour[i  ];
-        int b = tour[i+1];
-        int c = tour[j  ];
-        int d = tour[j+1];
+        a = tour[i  ];
+        b = tour[i+1];
+        c = tour[j  ];
+        d = tour[j+1];
 
-        int t1 = a;
-        int t2 = b;
-        int t3 = d;
-        int t4 = c;
+        t1 = a;
+        t2 = b;
+        t3 = d;
+        t4 = c;
 
 
-        bool testA = distance(t1,t2) > distance(t2,t3);
-        bool testB = distance(t3,t4) > distance(t4,t1);
+        testA = distance(t1,t2) > distance(t2,t3);
+        testB = distance(t3,t4) > distance(t4,t1);
 
         if(!testA && !testB)
           continue;
