@@ -2,6 +2,12 @@
 #include <vector>
 #include <math.h>
 
+#if __GNUC__
+    #include <climits>
+    #include <algorithm>
+    #include <stdio.h>
+#endif
+
 #ifndef TSP_AVALG
 #define TSP_AVALG
 
@@ -23,7 +29,7 @@
 // --------------------------------------------------
 // Running on VS. Do some stuff
 //--------------------------------------------------
-#ifdef VISUAL_STUDIO
+#ifndef __GNUC__
   #define scanf(...) scanf_s(__VA_ARGS__)
   #define WINDOWS
 #endif

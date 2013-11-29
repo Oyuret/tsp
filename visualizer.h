@@ -1,16 +1,17 @@
 #pragma once
 TSP* tsp;
 
-#ifdef WINDOWS
+#if __GNUC__
+    #include "GL/freeglut.h"
+    #include "GL/gl.h"
+    #include <unistd.h>
+#else
 	#include <windows.h>   // Standard Header For Most Programs
 	#include <gl/gl.h>     // The GL Header File
 	#include <gl/glut.h>   // The GL Utility Toolkit (Glut) Header
 	#pragma comment(lib,"glut32.lib")
 
-#else
-    #include <OpenGL/gl.h>     // The GL Header File
-    #include <OpenGL/glu.h>
-    #include <GLUT/glut.h>   // The GL Utility Toolkit (Glut) Header
+ // The GL Utility Toolkit (Glut) Header
 #endif
 
 float window_width;
@@ -41,7 +42,11 @@ void gl_keyboard(unsigned char key, int x, int y) {
   if (key==27)
     exit(0);
   else
+#if __GNUC__
+	usleep(1000);
+#else
     Sleep(1);
+#endif
 }
 
 bool firstTime=true;
