@@ -106,7 +106,6 @@ class TSP {
     std::vector<int>& get_tour() { return tour; }
     void init_buckets();
     void init_distances();
-
     float compute_total_cost();
 
 
@@ -123,6 +122,7 @@ class TSP {
 
     void reset_nodes();
 
+    void twoFive_opt();
     void two_opt();
     void three_opt();
     void greedy(int start);
