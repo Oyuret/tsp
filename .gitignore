@@ -24,6 +24,8 @@ build.xml
 *.gz
 
 #VS-stuff
+debug/
+release/
 *.vcxproj
 *.filters
 
