@@ -1,0 +1,31 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#netbeans specific
+dist/
+nbproject/
+manifest.mf
+build.xml
+
+#eclipse specific
+*.classpath
+*.project
+/build/
+/bin
+
+#texworks
+*.aux
+*.log
+*.pdf
+*.gz
+
+#VS-stuff
+*.vcxproj
+*.filters
+
+
+
