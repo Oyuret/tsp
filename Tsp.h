@@ -9,14 +9,21 @@
 // Debug macros
 //----------------------------------------------------
 
-//#define KATTIS        // Outcomment to run in debug mode
+//#define KATTIS          // Outcomment to run in debug mode
+#define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
 
 // --------------------------------------------------
-// Visual Studio crap
+// Not running on KATTIS. DO lots of testing
 // --------------------------------------------------
 #ifndef KATTIS
   #define OPEN_GL
   #define DRAW_NODE_NUMBERS
+#endif
+
+// --------------------------------------------------
+// Running on VS. Do some stuff
+//--------------------------------------------------
+#ifdef VISUAL_STUDIO
   #define scanf(...) scanf_s(__VA_ARGS__)
 #endif
 
@@ -29,9 +36,9 @@
 //#define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
 // Pick solving method
-#define GREEDY
+//#define GREEDY
 //#define TWO_OPT
-//#define GREEDY_TWO_OPT
+#define GREEDY_TWO_OPT
 
 
 //-----------------------------------------------------
@@ -85,6 +92,8 @@ class TSP {
     void init_buckets();
     void init_distances();
 
+    float compute_total_cost();
+
 
   private:
 
@@ -93,6 +102,11 @@ class TSP {
 
     float distance(const Node& a, const Node& b);
     float distance(int a, int b);
+
+    float compute_gain(int i, int j);
+    float compute_gain(int a, int b, int c, int d);
+
+    void reset_nodes();
 
     void two_opt();
     void three_opt();

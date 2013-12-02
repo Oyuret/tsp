@@ -39,8 +39,14 @@ int main ( int argc, char** argv ) {
 
   // We are debugging. Let's visualize it
   #ifndef KATTIS
+  printf("Total cost: %f\n", tsp.compute_total_cost());
   use_opengl(argc, argv, &tsp);
   system("pause");
+  #endif
+
+  // Are we on VS
+  #ifdef VISUAL_STUDIO
+    system("pause");
   #endif
   
 
