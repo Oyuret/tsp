@@ -1,4 +1,7 @@
 #include "Tsp.h"
+#ifdef OPEN_GL
+  #include "visualizer.h"
+#endif
 
 int main ( int argc, char** argv ) {
 
@@ -24,6 +27,7 @@ int main ( int argc, char** argv ) {
   
   tsp.solve();
 
+  // print a la Kattis
   int counter=0;
   int last = tsp.get_tour().size()-1;
   for(int node : tsp.get_tour()) {
@@ -33,7 +37,9 @@ int main ( int argc, char** argv ) {
     counter++;
   }
 
+  // We are debugging. Let's visualize it
   #ifndef KATTIS
+  use_opengl(argc, argv, &tsp);
   system("pause");
   #endif
   

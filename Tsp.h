@@ -15,9 +15,10 @@
 // Visual Studio crap
 // --------------------------------------------------
 #ifndef KATTIS
+  #define OPEN_GL
+  #define DRAW_NODE_NUMBERS
   #define scanf(...) scanf_s(__VA_ARGS__)
 #endif
-
 
 //-----------------------------------------------------
 // Run macros
@@ -27,9 +28,25 @@
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
 //#define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
+// Pick solving method
+#define GREEDY
+//#define TWO_OPT
+//#define GREEDY_TWO_OPT
+
+
+//-----------------------------------------------------
+// More macros
+//-----------------------------------------------------
 #ifdef USE_BUCKETS // Change these to alter behaviour of buckets
   #define NEIGHBOURHOOD_LIMIT 100
 #endif
+
+
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+// NO MORE MACROS
+//----------------------------------------------------------------------------
+//----------------------------------------------------------
 
 
 // ---------------------------------------------------

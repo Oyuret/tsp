@@ -30,7 +30,11 @@ void TSP::init_buckets() {
 }
 
 void TSP::solve() {
+
+  #ifdef GREEDY
   greedy(0);
+  #endif
+
 }
 
 void TSP::greedy(int start){
