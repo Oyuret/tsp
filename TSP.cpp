@@ -45,22 +45,21 @@ void TSP::init_distances() {
 #ifdef USE_BUCKETS
 void TSP::init_buckets() {
   std::vector<int> tmpList;
+
+  for(int j=0; j< nodes.size(); ++j) {
+      tmpList.push_back(j);
+  }
   // for each node copy the contents from distance to each other node.
   for(int i=0; i< nodes.size(); ++i) {
-    for(int j=0; j< nodes.size(); ++j) {
-      if(i!=j) tmpList.push_back(j);
-    }
 
     // order that list
     std::sort(tmpList.begin(), tmpList.end(), [=](int a, int b){return distance(i,a)<distance(i,b);});
 
     // put the NEIGHBOURHOOD_LIMIT ones to it's neighbourhood
-    for(int j=0; j<tmpList.size() && j<NEIGHBOURHOOD_LIMIT; ++j) {
+    for(int j=1; j<tmpList.size() && j<NEIGHBOURHOOD_LIMIT; ++j) {
       nodes[i].neighbourhood.push_back(tmpList[j]);
     }
 
-    // clear the list
-    tmpList.clear();
   }
 }
 #endif
@@ -154,9 +153,12 @@ void TSP::two_opt() {
     for (int i = 1; i < nodes.size()-1; i++) {
 
       int j = i + 2;
-
+      int max = 0;
+#ifdef USE_BUCKETS
+      for (; j < nodes.size() && max < NEIGHBOURHOOD_LIMIT; j++, max++) {
+#else
       for (; j < nodes.size(); j++) {
-
+#endif
         // test
         int a = tour[i  ];
         int b = tour[i+1];
@@ -190,6 +192,8 @@ void TSP::two_opt() {
       std::reverse(&tour[best_i + 1], &tour[best_j+1]); // Reverse path
     }
   }
+  
+
 }
 
 float TSP::compute_gain(int i, int j) {
