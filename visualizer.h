@@ -1,10 +1,17 @@
 #pragma once
 TSP* tsp;
 
-#include <windows.h>   // Standard Header For Most Programs
-#include <gl/gl.h>     // The GL Header File
-#include <gl/glut.h>   // The GL Utility Toolkit (Glut) Header
-#pragma comment(lib,"glut32.lib")
+#ifdef WINDOWS
+	#include <windows.h>   // Standard Header For Most Programs
+	#include <gl/gl.h>     // The GL Header File
+	#include <gl/glut.h>   // The GL Utility Toolkit (Glut) Header
+	#pragma comment(lib,"glut32.lib")
+
+#else
+    #include <OpenGL/gl.h>     // The GL Header File
+    #include <OpenGL/glu.h>
+    #include <GLUT/glut.h>   // The GL Utility Toolkit (Glut) Header
+#endif
 
 float window_width;
 float window_height;
