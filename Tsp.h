@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <algorithm>
 
 #if __GNUC__
     #include <climits>
-    #include <algorithm>
     #include <stdio.h>
 #endif
 
@@ -40,7 +40,7 @@
 
 #define MAX_2_OPT_LOOPS INT_MAX
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
-//#define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
+#define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
 // Pick solving method
 //#define GREEDY
@@ -73,7 +73,7 @@ class Node {
     bool used;
 
     #ifdef USE_BUCKETS
-    int neighbourhood[NEIGHBOURHOOD_LIMIT];
+    std::vector<int> neighbourhood;
     #endif
 
     // constructors
@@ -123,9 +123,6 @@ class TSP {
     std::vector<std::vector<float>> distances;
     #endif
 
-    #ifdef USE_BUCKETS
-    // BUCKETS!
-    #endif
 };
 
 

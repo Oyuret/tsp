@@ -22,14 +22,15 @@ float TSP::distance(int a, int b) {
 }
 
 float TSP::compute_total_cost() {
-        float total = float(0);
-        for(size_t i=0; i<tour.size()-1; ++i)
-                total += distance(tour[i],tour[i+1]);
+  float total = float(0);
+  for(size_t i=0; i<tour.size()-1; ++i)
+    total += distance(tour[i],tour[i+1]);
 
-        total += distance(tour[tour.size()-1],tour[0]);
-        return total;
+  total += distance(tour[tour.size()-1],tour[0]);
+  return total;
 }
 
+#ifdef USE_PRECOMPILED_DISTANCE_MATRIX
 void TSP::init_distances() {
   distances.resize(nodes.size());
   for(size_t i=0; i<nodes.size(); ++i) {
@@ -39,10 +40,30 @@ void TSP::init_distances() {
     }
   }
 }
+#endif
 
+#ifdef USE_BUCKETS
 void TSP::init_buckets() {
-  // DEM BUCKETS!
+  std::vector<int> tmpList;
+  // for each node copy the contents from distance to each other node.
+  for(int i=0; i< nodes.size(); ++i) {
+    for(int j=0; j< nodes.size(); ++j) {
+      if(i!=j) tmpList.push_back(j);
+    }
+
+    // order that list
+    std::sort(tmpList.begin(), tmpList.end(), [=](int a, int b){return distance(i,a)<distance(i,b);});
+
+    // put the NEIGHBOURHOOD_LIMIT ones to it's neighbourhood
+    for(int j=0; j<tmpList.size() && j<NEIGHBOURHOOD_LIMIT; ++j) {
+      nodes[i].neighbourhood.push_back(tmpList[j]);
+    }
+
+    // clear the list
+    tmpList.clear();
+  }
 }
+#endif
 
 void TSP::solve() {
 
@@ -51,13 +72,13 @@ void TSP::solve() {
 
   for(int i=0; i<nodes.size(); ++i) {
 
-  #ifdef GREEDY
+#ifdef GREEDY
     greedy(i);
-  #endif
-  #ifdef GREEDY_TWO_OPT
+#endif
+#ifdef GREEDY_TWO_OPT
     greedy(i);
     two_opt();
-  #endif
+#endif
 
     reset_nodes();
 
@@ -86,7 +107,17 @@ void TSP::greedy(int start) {
 
     // We are using buckets
 #ifdef USE_BUCKETS
-    //TODO USE BUCKETS
+    bool found=false;
+    for(int neighbour : nodes[tour[i-1]].neighbourhood) {
+
+      if(nodes[neighbour].used == false) {
+        tour[i]=neighbour;
+        nodes[neighbour].used=true;
+        found=true;
+        break;
+      }
+    }
+    if(found) continue;
 #endif
 
     // We are not using buckets
@@ -109,7 +140,6 @@ void TSP::greedy(int start) {
   tour.back() = start;
 }
 
-#ifndef USE_BUCKETS
 void TSP::two_opt() {
 
   float gain;
@@ -161,15 +191,14 @@ void TSP::two_opt() {
     }
   }
 }
-#endif
 
 float TSP::compute_gain(int i, int j) {
-        int a, b, c, d;
- 
-        a = tour[i];
-        b = tour[i + 1];
-        c = tour[j];
-        d = tour[j + 1];
- 
-        return (distance(a,c) + distance(b,d)) - (distance(c,d) + distance(a,b));
+  int a, b, c, d;
+
+  a = tour[i];
+  b = tour[i + 1];
+  c = tour[j];
+  d = tour[j + 1];
+
+  return (distance(a,c) + distance(b,d)) - (distance(c,d) + distance(a,b));
 }

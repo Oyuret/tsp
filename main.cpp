@@ -16,15 +16,15 @@ int main ( int argc, char** argv ) {
   for(Node& node : tsp.get_nodes()) {
     scanf("%f%f", &node.x, &node.y);
   }
-  
-  #ifdef USE_BUCKETS
-  tsp.init_buckets();
-  #endif
 
   #ifdef USE_PRECOMPILED_DISTANCE_MATRIX
   tsp.init_distances();
   #endif
   
+  #ifdef USE_BUCKETS
+  tsp.init_buckets();
+  #endif
+
   tsp.solve();
 
   // print a la Kattis
