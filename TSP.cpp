@@ -3,6 +3,7 @@
 void TSP::reset_nodes() {
   for(Node& node : nodes) {
     node.used = false;
+    node.tour_index=0;
   }
 }
 
@@ -69,8 +70,8 @@ void TSP::solve() {
   float best = float(INT_MAX);
   std::vector<int> best_tour(nodes.size()+1);
 
-  for(int i=0; i<nodes.size(); ++i) {
-
+  for(int i=0; i<nodes.size(); i+=nodes.size()/5) {
+  //for(int i=0; i<nodes.size(); ++i) {
 #ifdef GREEDY
     greedy(i);
 #endif
@@ -113,6 +114,7 @@ void TSP::greedy(int start) {
       if(nodes[neighbour].used == false) {
         tour[i]=neighbour;
         nodes[neighbour].used=true;
+        nodes[neighbour].tour_index = i;
         found=true;
         break;
       }
@@ -134,6 +136,7 @@ void TSP::greedy(int start) {
     }
 
     nodes[bestIndex].used = true;
+    nodes[bestIndex].tour_index = i;
     tour[ i ] = bestIndex;
   }
 
@@ -217,28 +220,31 @@ void TSP::two_opt() {
   float gain;
   float bestGain = float(INT_MAX);
   int best_i, best_j;
+  int max_loops = 0;
 
-  while(bestGain != float(0)) {
+  while(bestGain != float(0) && max_loops < MAX_2_OPT_LOOPS) {
     bestGain = float(0);
 
     // testA
     for(int i=1; i<nodes.size(); ++i) {
 
       int a = tour[i];
-      auto aIter = std::find(tour.begin(), tour.end(), a);
+      //auto aIter = std::find(tour.begin(), tour.end(), a);
       int b = tour[i+1];
 
       for(int d : nodes[b].neighbourhood) {
 
         if(distance(b,a) > distance(b,d)) {
-          auto dIter = std::find(tour.begin(), tour.end(), d);
+          //auto dIter = std::find(tour.begin(), tour.end(), d);
 
-          if(dIter == tour.begin()) continue;
+          //if(dIter == tour.begin()) continue;
+          if(nodes[d].tour_index==0) continue;
             
-          dIter--;
-          int c = *dIter;
+          //dIter--;
+          //int c = *dIter;
+          int c = tour[nodes[d].tour_index-1];
 
-          if(dIter < aIter) continue;
+          if(nodes[c].tour_index < nodes[a].tour_index) continue;
 
           gain = compute_gain(a,b,c,d);
 
@@ -261,23 +267,25 @@ void TSP::two_opt() {
       
       
       int c = tour[i  ];
-      auto cIter = std::find(tour.begin(), tour.end(), c);
+      //auto cIter = std::find(tour.begin(), tour.end(), c);
       int d = tour[i+1];
 
       for(int a : nodes[c].neighbourhood) {
 
         if(distance(c,d) > distance(c,a)) {
 
-          auto aIter = std::find(tour.begin(), tour.end(), a);
-          auto last = tour.end();
-          last--;
+          //auto aIter = std::find(tour.begin(), tour.end(), a);
+          //auto last = tour.end();
+          //last--;
 
-          if(aIter == last) continue;
+          //if(aIter == last) continue;
+          if(nodes[a].tour_index == tour.size()-1) continue;
           
-          auto bIter = aIter+1;
-          int b = *bIter;
+          //auto bIter = aIter+1;
+          //int b = *bIter;
+          int b = tour[nodes[a].tour_index+1];
 
-          if(cIter < aIter) continue;
+          if(nodes[c].tour_index < nodes[a].tour_index) continue;
 
           gain = compute_gain(a,b,c,d);
 
@@ -296,13 +304,22 @@ void TSP::two_opt() {
 
     if(bestGain != float(0)) {
 
-      auto best_iIter = std::find(tour.begin(), tour.end(), best_i);
-      auto best_jIter = std::find(tour.begin(), tour.end(), best_j);
+      //auto best_iIter = std::find(tour.begin(), tour.end(), best_i);
+      //auto best_jIter = std::find(tour.begin(), tour.end(), best_j);
 
-      best_iIter++;
-      best_jIter++;
+      //best_iIter++;
+      //best_jIter++;
 
-      std::reverse(best_iIter, best_jIter); // Reverse path
+      //std::reverse(best_iIter, best_jIter); // Reverse path
+      
+      std::reverse(&tour[nodes[best_i].tour_index + 1], &tour[nodes[best_j].tour_index+1]);
+
+      
+      int end = nodes[best_j].tour_index+1;
+      for(size_t i=nodes[best_i].tour_index + 1; i<end; ++i)
+        nodes[tour[i]].tour_index = i;
+
+      max_loops++;
     }
   }
 }

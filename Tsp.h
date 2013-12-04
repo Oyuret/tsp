@@ -15,7 +15,7 @@
 // Debug macros
 //----------------------------------------------------
 
-//#define KATTIS          // Outcomment to run in debug mode
+#define KATTIS          // Outcomment to run in debug mode
 #define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
 
 // --------------------------------------------------
@@ -38,7 +38,7 @@
 // Run macros
 //-----------------------------------------------------
 
-#define MAX_2_OPT_LOOPS INT_MAX
+#define MAX_2_OPT_LOOPS 30
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
 #define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
@@ -71,13 +71,14 @@ class Node {
   public:
     float x, y;
     bool used;
+    int tour_index;
 
     #ifdef USE_BUCKETS
     std::vector<int> neighbourhood;
     #endif
 
     // constructors
-    Node() : used(false) {}
+    Node() : used(false), tour_index(0) {}
     Node(float x, float y) : x(x), y(y), used(false) {}
  
 };
