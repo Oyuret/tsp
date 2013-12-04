@@ -70,8 +70,18 @@ void TSP::solve() {
   float best = float(INT_MAX);
   std::vector<int> best_tour(nodes.size()+1);
 
+  greedy(0);
+  two_opt();
+  std::swap(tour,best_tour);
+  reset_nodes();
+
+
+  // We got less than 50 nodes. Test them all
   if(nodes.size() <= 50) {
+
     for(int i=0; i<nodes.size(); ++i) {
+
+    reset_nodes();
 #ifdef GREEDY
       greedy(i);
 #endif
@@ -80,21 +90,24 @@ void TSP::solve() {
       two_opt();
 #endif
 
-      reset_nodes();
+
 
       float totalcost = compute_total_cost();
       if(totalcost < best) {
         best = totalcost;
         std::swap(tour, best_tour);
       }
+
+      
     }
 
-    std::swap(tour, best_tour);
   }
   else {
 
-    for(int i=0; i<nodes.size(); i+=nodes.size()/5) {
-      //for(int i=0; i<nodes.size(); ++i) {
+    for(int i=0; i<nodes.size(); i+=nodes.size()/10) {
+
+    reset_nodes();
+
 #ifdef GREEDY
       greedy(i);
 #endif
@@ -103,18 +116,30 @@ void TSP::solve() {
       two_opt();
 #endif
 
-      reset_nodes();
-
       float totalcost = compute_total_cost();
       if(totalcost < best) {
         best = totalcost;
         std::swap(tour, best_tour);
       }
+
+      
     }
 
-    std::swap(tour, best_tour);
-
   }
+
+#ifdef SHUFFLING
+  for(int j=0; j<MAX_SHUFFLES; ++j) {
+    shuffle(13);
+    two_opt();
+    float totalcost = compute_total_cost();
+    if(totalcost < best) {
+      best = totalcost;
+      std::swap(tour, best_tour);
+    }
+  }
+#endif
+
+  std::swap(tour, best_tour);
 }
 
 void TSP::greedy(int start) {
@@ -345,6 +370,21 @@ void TSP::two_opt() {
 
       max_loops++;
     }
+  }
+}
+#endif
+
+#ifdef SHUFFLING
+void TSP::shuffle(int n) {
+  for(size_t i=0; i<n; ++i) {
+
+    int tourA = 1 + rand() % (nodes.size()-2);
+    int tourB = 1 + rand() % (nodes.size()-2);
+
+    std::swap(tour[tourA],tour[tourB]);
+
+    nodes[tour[tourA]].tour_index = tourA;
+    nodes[tour[tourB]].tour_index = tourB;
   }
 }
 #endif

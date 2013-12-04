@@ -60,6 +60,7 @@ int main ( int argc, char** argv ) {
 
   // Are we on VS
   #ifdef VISUAL_STUDIO
+    printf("Total cost: %f\n", tsp.compute_total_cost());
     system("pause");
   #endif
   

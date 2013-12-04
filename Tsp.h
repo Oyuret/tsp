@@ -16,7 +16,7 @@
 //----------------------------------------------------
 
 #define KATTIS          // Outcomment to run in debug mode
-//#define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
+#define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
 
 // --------------------------------------------------
 // Not running on KATTIS. DO lots of testing
@@ -38,15 +38,22 @@
 // Run macros
 //-----------------------------------------------------
 
-#define MAX_2_OPT_LOOPS 1000
+#define MAX_2_OPT_LOOPS 250
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
 #define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
 // Pick solving method
 //#define GREEDY
 //#define TWO_OPT
-#define GREEDY_TWO_OPT
+//#define GREEDY_TWO_OPT
+#define GREEDY_SHUFFLING_TWO_OPT
 
+
+#ifdef GREEDY_SHUFFLING_TWO_OPT
+  #define GREEDY_TWO_OPT
+  #define SHUFFLING
+  #define MAX_SHUFFLES 5
+#endif
 
 //-----------------------------------------------------
 // More macros
@@ -119,6 +126,7 @@ class TSP {
     void two_opt();
     void three_opt();
     void greedy(int start);
+    void shuffle(int n);
 
     #ifdef USE_PRECOMPILED_DISTANCE_MATRIX
     std::vector<std::vector<float>> distances;
