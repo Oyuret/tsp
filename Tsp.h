@@ -45,8 +45,9 @@
 // Pick solving method
 //#define GREEDY
 //#define TWO_OPT
-#define GREEDY_TWO_OPT
+//#define GREEDY_TWO_OPT
 //#define GREEDY_SHUFFLING_TWO_OPT
+#define GREEDY_TWO_POINT_FIVE_OPT
 
 
 #ifdef GREEDY_SHUFFLING_TWO_OPT

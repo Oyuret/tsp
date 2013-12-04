@@ -90,6 +90,10 @@ void TSP::solve() {
       greedy(i);
       two_opt();
 #endif
+#ifdef GREEDY_TWO_POINT_FIVE_OPT
+      greedy(i);
+      twoFive_opt();
+#endif
 
 
 
@@ -115,6 +119,10 @@ void TSP::solve() {
 #ifdef GREEDY_TWO_OPT
       greedy(i);
       two_opt();
+#endif
+#ifdef GREEDY_TWO_POINT_FIVE_OPT
+      greedy(i);
+      twoFive_opt();
 #endif
 
       float totalcost = compute_total_cost();
@@ -166,7 +174,7 @@ void TSP::twoFive_opt(){
    Node &node1 = nodes[tour[i]];
    Node &node2 = nodes[tour[i+1]];
    node2Index=tour[i+1];
-    for(int neighbour : nodes[tour[i-1]].neighbourhood) {
+    for(int neighbour : nodes[tour[i]].neighbourhood) {
      Node &node3 = nodes[neighbour];
      node3Index = node3.tour_index;
      Node &node4 = nodes[neighbour+1];
@@ -175,8 +183,11 @@ void TSP::twoFive_opt(){
         
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
-     curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
-     opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+     //curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
+     //opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+
+     curr = distance(tour[i],tour[i+1])+distance(neighbour, neighbour+1)+distance(tour[i+1], i+2);
+     opt= distance(neighbour+1,tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],i+2);
          
      if(opt < curr){
       if(node2.tour_index < node3.tour_index){
