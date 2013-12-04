@@ -71,7 +71,6 @@ void TSP::solve() {
   std::vector<int> best_tour(nodes.size()+1);
 
   greedy(0);
-  twoFive_opt();
   two_opt();
   std::swap(tour,best_tour);
   reset_nodes();
@@ -89,8 +88,13 @@ void TSP::solve() {
 #ifdef GREEDY_TWO_OPT
       greedy(i);
       two_opt();
-#endif
 
+#endif
+#ifdef TWO_FIVE_OPT
+      greedy(i);
+      two_opt();
+       twoFive_opt();
+#endif
 
 
       float totalcost = compute_total_cost();
@@ -145,29 +149,23 @@ void TSP::solve() {
 
 void TSP::twoFive_opt(){
  bool improvement = true;
- float curr;
- float opt;
- int node2Index;
- int node3Index;
- int node4Index;
-
  while(improvement){
   improvement=false;
   for(int i =0;i<nodes.size();i++){
    Node &node1 = nodes[tour[i]];
    Node &node2 = nodes[tour[i+1]];
-   node2Index=tour[i+1];
+   int node2Index=tour[i+1];
     for(int neighbour : nodes[tour[i-1]].neighbourhood) {
      Node &node3 = nodes[neighbour];
-     node3Index = node3.tour_index;
+     int node3Index = node3.tour_index;
      Node &node4 = nodes[neighbour+1];
-     node4Index=node4.tour_index;
+     int node4Index=node4.tour_index;
      Node &node5 = nodes[i+2];
         
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
-     curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
-     opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+     float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
+     float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
          
      if(opt < curr){
       if(node2.tour_index < node3.tour_index){
