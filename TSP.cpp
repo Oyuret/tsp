@@ -67,7 +67,7 @@ void TSP::init_buckets() {
 void TSP::solve() {
 
   float best = float(INT_MAX);
-  std::vector<int> best_tour;
+  std::vector<int> best_tour(nodes.size()+1);
 
   for(int i=0; i<nodes.size(); ++i) {
 
@@ -80,9 +80,10 @@ void TSP::solve() {
 #endif
 
     reset_nodes();
-
-    if(compute_total_cost() < best) {
-      best = compute_total_cost();
+    
+    float totalcost = compute_total_cost();
+    if(totalcost < best) {
+      best = totalcost;
       std::swap(tour, best_tour);
     }
   }
@@ -139,6 +140,7 @@ void TSP::greedy(int start) {
   tour.back() = start;
 }
 
+#ifndef USE_BUCKETS
 void TSP::two_opt() {
 
   float gain;
@@ -154,11 +156,9 @@ void TSP::two_opt() {
 
       int j = i + 2;
       int max = 0;
-#ifdef USE_BUCKETS
-      for (; j < nodes.size() && max < NEIGHBOURHOOD_LIMIT; j++, max++) {
-#else
+
       for (; j < nodes.size(); j++) {
-#endif
+
         // test
         int a = tour[i  ];
         int b = tour[i+1];
@@ -195,6 +195,7 @@ void TSP::two_opt() {
   
 
 }
+#endif
 
 float TSP::compute_gain(int i, int j) {
   int a, b, c, d;
@@ -206,3 +207,103 @@ float TSP::compute_gain(int i, int j) {
 
   return (distance(a,c) + distance(b,d)) - (distance(c,d) + distance(a,b));
 }
+
+float TSP::compute_gain(int a, int b, int c, int d) {
+  return (distance(a,c) + distance(b,d)) - (distance(c,d) + distance(a,b));
+}
+
+#ifdef USE_BUCKETS
+void TSP::two_opt() {
+  float gain;
+  float bestGain = float(INT_MAX);
+  int best_i, best_j;
+
+  while(bestGain != float(0)) {
+    bestGain = float(0);
+
+    // testA
+    for(int i=1; i<nodes.size(); ++i) {
+
+      int a = tour[i];
+      auto aIter = std::find(tour.begin(), tour.end(), a);
+      int b = tour[i+1];
+
+      for(int d : nodes[b].neighbourhood) {
+
+        if(distance(b,a) > distance(b,d)) {
+          auto dIter = std::find(tour.begin(), tour.end(), d);
+
+          if(dIter == tour.begin()) continue;
+            
+          dIter--;
+          int c = *dIter;
+
+          if(dIter < aIter) continue;
+
+          gain = compute_gain(a,b,c,d);
+
+          if (gain < bestGain) {
+            bestGain = gain;
+            best_i = a;
+            best_j = c;
+            break;
+          }
+          
+        } else {
+          break;
+        }
+      }
+    }
+
+
+    // testB
+    for(int i = 1; i < nodes.size(); i++) {
+      
+      
+      int c = tour[i  ];
+      auto cIter = std::find(tour.begin(), tour.end(), c);
+      int d = tour[i+1];
+
+      for(int a : nodes[c].neighbourhood) {
+
+        if(distance(c,d) > distance(c,a)) {
+
+          auto aIter = std::find(tour.begin(), tour.end(), a);
+          auto last = tour.end();
+          last--;
+
+          if(aIter == last) continue;
+          
+          auto bIter = aIter+1;
+          int b = *bIter;
+
+          if(cIter < aIter) continue;
+
+          gain = compute_gain(a,b,c,d);
+
+          if (gain < bestGain) {
+             bestGain = gain;
+             best_i = a;
+             best_j = c;
+             break;
+          }
+          
+        } else {
+          break;
+        }
+      }
+    }
+
+    if(bestGain != float(0)) {
+
+      auto best_iIter = std::find(tour.begin(), tour.end(), best_i);
+      auto best_jIter = std::find(tour.begin(), tour.end(), best_j);
+
+      best_iIter++;
+      best_jIter++;
+
+      std::reverse(best_iIter, best_jIter); // Reverse path
+    }
+  }
+}
+#endif
