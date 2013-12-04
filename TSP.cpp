@@ -187,8 +187,8 @@ z++;
      //curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
      //opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
 
-   float  curr = distance(tour[i],tour[i+1])+distance(neighbour, neighbour+1)+distance(tour[i+1], i+2);
-    float opt= distance(neighbour+1,tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],i+2);
+   float  curr = distance(tour[i],tour[i+1])+distance(neighbour, node3Index+1)+distance(tour[i+1], i+2);
+    float opt= distance(node3Index+1,tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],i+2);
          
      if(opt < curr){
       if(node2.tour_index < node3.tour_index){
