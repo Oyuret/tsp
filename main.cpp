@@ -17,6 +17,19 @@ int main ( int argc, char** argv ) {
     scanf("%f%f", &node.x, &node.y);
   }
 
+  if(nodeCount <4){
+   for(int i=0;i<nodeCount;i++){
+     printf("%d\n",i);
+   }
+  // We are debugging. Let's visualize it
+  #ifndef KATTIS
+  printf("Total cost: %f\n", tsp.compute_total_cost());
+  use_opengl(argc, argv, &tsp);
+  system("pause");
+  #endif
+   return 0;
+  }
+
   #ifdef USE_PRECOMPILED_DISTANCE_MATRIX
   tsp.init_distances();
   #endif
