@@ -16,7 +16,7 @@
 //----------------------------------------------------
 
 #define KATTIS          // Outcomment to run in debug mode
-#define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
+//#define VISUAL_STUDIO   // This is to get rid of annoying scanf warnings
 
 // --------------------------------------------------
 // Not running on KATTIS. DO lots of testing
@@ -38,7 +38,7 @@
 // Run macros
 //-----------------------------------------------------
 
-#define MAX_2_OPT_LOOPS 30
+#define MAX_2_OPT_LOOPS 1000
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
 #define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 

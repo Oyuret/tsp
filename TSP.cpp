@@ -48,7 +48,7 @@ void TSP::init_buckets() {
   std::vector<int> tmpList;
 
   for(int j=0; j< nodes.size(); ++j) {
-      tmpList.push_back(j);
+    tmpList.push_back(j);
   }
   // for each node copy the contents from distance to each other node.
   for(int i=0; i< nodes.size(); ++i) {
@@ -70,27 +70,51 @@ void TSP::solve() {
   float best = float(INT_MAX);
   std::vector<int> best_tour(nodes.size()+1);
 
-  for(int i=0; i<nodes.size(); i+=nodes.size()/5) {
-  //for(int i=0; i<nodes.size(); ++i) {
+  if(nodes.size() <= 50) {
+    for(int i=0; i<nodes.size(); ++i) {
 #ifdef GREEDY
-    greedy(i);
+      greedy(i);
 #endif
 #ifdef GREEDY_TWO_OPT
-    greedy(i);
-    two_opt();
+      greedy(i);
+      two_opt();
 #endif
 
-    reset_nodes();
-    
-    float totalcost = compute_total_cost();
-    if(totalcost < best) {
-      best = totalcost;
-      std::swap(tour, best_tour);
+      reset_nodes();
+
+      float totalcost = compute_total_cost();
+      if(totalcost < best) {
+        best = totalcost;
+        std::swap(tour, best_tour);
+      }
     }
+
+    std::swap(tour, best_tour);
   }
+  else {
 
-  std::swap(tour, best_tour);
+    for(int i=0; i<nodes.size(); i+=nodes.size()/5) {
+      //for(int i=0; i<nodes.size(); ++i) {
+#ifdef GREEDY
+      greedy(i);
+#endif
+#ifdef GREEDY_TWO_OPT
+      greedy(i);
+      two_opt();
+#endif
 
+      reset_nodes();
+
+      float totalcost = compute_total_cost();
+      if(totalcost < best) {
+        best = totalcost;
+        std::swap(tour, best_tour);
+      }
+    }
+
+    std::swap(tour, best_tour);
+
+  }
 }
 
 void TSP::greedy(int start) {
@@ -195,7 +219,7 @@ void TSP::two_opt() {
       std::reverse(&tour[best_i + 1], &tour[best_j+1]); // Reverse path
     }
   }
-  
+
 
 }
 #endif
@@ -239,7 +263,7 @@ void TSP::two_opt() {
 
           //if(dIter == tour.begin()) continue;
           if(nodes[d].tour_index==0) continue;
-            
+
           //dIter--;
           //int c = *dIter;
           int c = tour[nodes[d].tour_index-1];
@@ -254,7 +278,7 @@ void TSP::two_opt() {
             best_j = c;
             break;
           }
-          
+
         } else {
           break;
         }
@@ -264,8 +288,8 @@ void TSP::two_opt() {
 
     // testB
     for(int i = 1; i < nodes.size(); i++) {
-      
-      
+
+
       int c = tour[i  ];
       //auto cIter = std::find(tour.begin(), tour.end(), c);
       int d = tour[i+1];
@@ -280,7 +304,7 @@ void TSP::two_opt() {
 
           //if(aIter == last) continue;
           if(nodes[a].tour_index == tour.size()-1) continue;
-          
+
           //auto bIter = aIter+1;
           //int b = *bIter;
           int b = tour[nodes[a].tour_index+1];
@@ -290,12 +314,12 @@ void TSP::two_opt() {
           gain = compute_gain(a,b,c,d);
 
           if (gain < bestGain) {
-             bestGain = gain;
-             best_i = a;
-             best_j = c;
-             break;
+            bestGain = gain;
+            best_i = a;
+            best_j = c;
+            break;
           }
-          
+
         } else {
           break;
         }
@@ -311,10 +335,10 @@ void TSP::two_opt() {
       //best_jIter++;
 
       //std::reverse(best_iIter, best_jIter); // Reverse path
-      
+
       std::reverse(&tour[nodes[best_i].tour_index + 1], &tour[nodes[best_j].tour_index+1]);
 
-      
+
       int end = nodes[best_j].tour_index+1;
       for(size_t i=nodes[best_i].tour_index + 1; i<end; ++i)
         nodes[tour[i]].tour_index = i;

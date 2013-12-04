@@ -22,6 +22,7 @@ int main ( int argc, char** argv ) {
   #endif
   
   #ifdef USE_BUCKETS
+  
   tsp.init_buckets();
   #endif
 
