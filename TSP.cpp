@@ -77,7 +77,7 @@ void TSP::solve() {
 
 
   // We got less than 50 nodes. Test them all
-  if(nodes.size() <= 50) {
+  if(nodes.size() <= 275) {
 
     for(int i=0; i<nodes.size(); ++i) {
 
@@ -109,7 +109,7 @@ void TSP::solve() {
   }
   else {
 
-    for(int i=0; i<nodes.size(); i+=nodes.size()/10) {
+    for(int i=0; i<nodes.size(); i+=nodes.size()/22) {
 
     reset_nodes();
 
@@ -132,14 +132,23 @@ void TSP::solve() {
 
   }
 
+
+
 #ifdef SHUFFLING
+  for(int i=0; i< tour.size()-1; ++i) {
+    nodes[tour[i]].tour_index = i;
+  }
+
   for(int j=0; j<MAX_SHUFFLES; ++j) {
-    shuffle(13);
+    shuffle(2);
     two_opt();
     float totalcost = compute_total_cost();
     if(totalcost < best) {
       best = totalcost;
       std::swap(tour, best_tour);
+      for(int i=0; i< tour.size()-1; ++i) {
+        nodes[tour[i]].tour_index = i;
+      }
     }
   }
 #endif

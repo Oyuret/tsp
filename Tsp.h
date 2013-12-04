@@ -38,21 +38,21 @@
 // Run macros
 //-----------------------------------------------------
 
-#define MAX_2_OPT_LOOPS 250
+#define MAX_2_OPT_LOOPS 350
 #define USE_PRECOMPILED_DISTANCE_MATRIX     // Outcomment to disable distance matrix
 #define USE_BUCKETS                     // Outcomment to disable neighbourhood buckets
 
 // Pick solving method
 //#define GREEDY
 //#define TWO_OPT
-//#define GREEDY_TWO_OPT
-#define GREEDY_SHUFFLING_TWO_OPT
+#define GREEDY_TWO_OPT
+//#define GREEDY_SHUFFLING_TWO_OPT
 
 
 #ifdef GREEDY_SHUFFLING_TWO_OPT
   #define GREEDY_TWO_OPT
   #define SHUFFLING
-  #define MAX_SHUFFLES 5
+  #define MAX_SHUFFLES 1000
 #endif
 
 
