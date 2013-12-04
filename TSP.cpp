@@ -72,7 +72,6 @@ void TSP::solve() {
 
   greedy(0);
   two_opt();
- twoFive_opt();
   std::swap(tour,best_tour);
   reset_nodes();
 
@@ -89,6 +88,11 @@ void TSP::solve() {
 #ifdef GREEDY_TWO_OPT
       greedy(i);
       two_opt();
+
+#endif
+#ifdef GREEDY_TWO_POINT_FIVE_OPT
+      greedy(i);
+      twoFive_opt();
 
 #endif
 
@@ -114,6 +118,10 @@ void TSP::solve() {
 #ifdef GREEDY_TWO_OPT
       greedy(i);
       two_opt();
+#endif
+#ifdef GREEDY_TWO_POINT_FIVE_OPT
+      greedy(i);
+      twoFive_opt();
 #endif
 
       float totalcost = compute_total_cost();
@@ -163,6 +171,7 @@ z++;
    int node2Index=tour[i+1];
    int node2tIndex=i+1;
     for(int neighbour : nodes[tour[i]].neighbourhood) {
+     if(neighbour < i+1)break;
      Node &node3 = nodes[neighbour];
      int node3Index = node3.tour_index;
      Node &node4 = nodes[neighbour+1];
@@ -171,9 +180,17 @@ z++;
         
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
-     float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
-     float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
-    if(opt < curr){
+
+//     float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
+ //    float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+
+     //curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
+     //opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+
+   float  curr = distance(tour[i],tour[i+1])+distance(neighbour, neighbour+1)+distance(tour[i+1], i+2);
+    float opt= distance(neighbour+1,tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],i+2);
+         
+     if(opt < curr){
       if(node2.tour_index < node3.tour_index){
        for(int n=node2.tour_index;n<node3Index;n++){
         tour[n]=tour[n+1];
