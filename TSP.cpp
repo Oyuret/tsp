@@ -165,24 +165,24 @@ int z=0;
  while(improvement && z < 10000){
 z++;
   improvement=false;
-  for(int i =0;i<nodes.size();i++){
+  for(int i =0;i<(nodes.size()-1);i++){
    Node &node1 = nodes[tour[i]];
    Node &node2 = nodes[tour[i+1]];
    int node2Index=tour[i+1];
    int node2tIndex=i+1;
     for(int neighbour : nodes[tour[i]].neighbourhood) {
-     if(neighbour < i+1)break;
+     if(neighbour < i+1 )break;
      Node &node3 = nodes[neighbour];
      int node3Index = node3.tour_index;
-     Node &node4 = nodes[neighbour+1];
+     Node &node4 = nodes[node3Index+1];
      int node4Index=node4.tour_index;
-     Node &node5 = nodes[i+2];
+     Node &node5 = nodes[tour[i+2]];
         
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
 
-//     float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
- //    float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
+   //  float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
+    // float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
 
      //curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
      //opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
