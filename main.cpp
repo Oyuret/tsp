@@ -59,7 +59,7 @@ int main ( int argc, char** argv ) {
   #endif
 
   // Are we on VS
-  #ifdef VISUAL_STUDIO
+  #ifndef __GNUC__
     printf("Total cost: %f\n", tsp.compute_total_cost());
     system("pause");
   #endif
