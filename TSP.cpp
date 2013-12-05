@@ -174,10 +174,10 @@ z++;
      if(neighbour < i+1 )break;
      Node &node3 = nodes[neighbour];
      int node3Index = node3.tour_index;
-     Node &node4 = nodes[node3Index+1];
+     Node &node4 = nodes[tour[node3Index+1]];
      int node4Index=node4.tour_index;
      Node &node5 = nodes[tour[i+2]];
-        
+
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
 
@@ -198,13 +198,15 @@ z++;
        }
        tour[node3Index]=node2Index;
        nodes[node2Index].tour_index=node3Index;
-     }else{
-      for(int n=node2.tour_index;n>node4Index;n--){
+
+ }else{
+    for(int n=node2.tour_index;n>node4Index;n--){
        tour[n]=tour[n-1];
        nodes[tour[n]].tour_index=n;
       }
       tour[node4Index]=node2Index;
       nodes[node2Index].tour_index=node4Index; 
+//printf("%i %i \n",tour[node4Index],nodes[node2Index].tour_index);
      }
      improvement = true;
      break;
