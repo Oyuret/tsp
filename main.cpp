@@ -50,7 +50,6 @@ int main ( int argc, char** argv ) {
     printf("%d\n",node);
     counter++;
   }
- 
   // We are debugging. Let's visualize it
   #ifndef KATTIS
   printf("Total cost: %f\n", tsp.compute_total_cost());

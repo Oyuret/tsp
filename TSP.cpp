@@ -71,7 +71,9 @@ void TSP::solve() {
   std::vector<int> best_tour(nodes.size()+1);
 
   greedy(0);
+  
   two_opt();
+
   std::swap(tour,best_tour);
   reset_nodes();
 
@@ -92,7 +94,7 @@ void TSP::solve() {
 #endif
 #ifdef GREEDY_TWO_POINT_FIVE_OPT
       greedy(i);
-      twoFive_opt();
+     twoFive_opt();
 
 #endif
 
@@ -161,38 +163,41 @@ void TSP::solve() {
 
 void TSP::twoFive_opt(){
  bool improvement = true;
-int z=0;
- while(improvement && z < 10000){
-z++;
+
+float curr;
+float opt;
+int max = nodes.size()-1;
+
+int node2Index;
+int node3Index;
+int node4Index;
+
+int n;
+int i;
+ while(improvement){
+
   improvement=false;
-  for(int i =0;i<(nodes.size()-1);i++){
+  for(i =0;i<max;i++){
    Node &node1 = nodes[tour[i]];
    Node &node2 = nodes[tour[i+1]];
-   int node2Index=tour[i+1];
-   int node2tIndex=i+1;
+   node2Index=tour[i+1];
     for(int neighbour : nodes[tour[i]].neighbourhood) {
      if(neighbour < i+1 )break;
      Node &node3 = nodes[neighbour];
-     int node3Index = node3.tour_index;
+     node3Index = node3.tour_index;
      Node &node4 = nodes[tour[node3Index+1]];
-     int node4Index=node4.tour_index;
+     node4Index=node4.tour_index;
+     
      Node &node5 = nodes[tour[i+2]];
 
      if(node2.tour_index == node3Index || node2.tour_index == node4Index || node3Index==node4Index) break;
            
-
-   //  float curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
-    // float opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
-
-     //curr = distance(node1,node2)+distance(node3,node4)+distance(node2,node5);
-     //opt = distance(node4,node2)+distance(node3,node2)+distance(node1,node5);
-
-   float  curr = distance(tour[i],tour[i+1])+distance(neighbour, node3Index+1)+distance(tour[i+1], i+2);
-    float opt= distance(node3Index+1,tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],i+2);
+     curr = distance(tour[i],tour[i+1])+distance(neighbour, tour[node3Index+1])+distance(tour[i+1], tour[i+2]);
+    opt= distance(tour[node3Index+1],tour[i+1])+distance(neighbour,tour[i+1])+distance(tour[i],tour[i+2]);
          
      if(opt < curr){
-      if(node2.tour_index < node3.tour_index){
-       for(int n=node2.tour_index;n<node3Index;n++){
+    if(node2.tour_index < node3.tour_index){
+       for(n=node2.tour_index;n<node3Index;n++){
         tour[n]=tour[n+1];
         nodes[tour[n]].tour_index=n;
        }
@@ -200,7 +205,7 @@ z++;
        nodes[node2Index].tour_index=node3Index;
 
  }else{
-    for(int n=node2.tour_index;n>node4Index;n--){
+    for(n=node2.tour_index;n>node4Index;n--){
        tour[n]=tour[n-1];
        nodes[tour[n]].tour_index=n;
       }
